@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Website</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Arial", sans-serif;
+    }
+    body {
+      background-color: #f3f3f3;
+      color: #222;
+      overflow: hidden;
+    }
+    /* 左侧固定标题 */
+    .left-title {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 1px;
+      z-index: 99;
+    }
+    /* 右侧固定导航栏 */
+    .right-nav {
+      position: fixed;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-end;
+      z-index: 99;
+    }
+    .nav-menu-icon {
+      width: 30px;
+      height: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .nav-menu-icon span {
+      width: 100%;
+      height: 3px;
+      background: #222;
+      display: block;
+    }
+    .right-nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 15px;
+      padding: 8px 14px;
+    }
+    .right-nav a.active {
+      background: #222;
+      color: #fff;
+    }
+    /* 主滚动容器：竖向分页滚动 */
+    .main-wrap {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none; /* 隐藏滚动条 */
+    }
+    .main-wrap::-webkit-scrollbar {
+      display: none; /* 隐藏webkit滚动条 */
+    }
+    .page-item {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
+      padding: 0 120px;
+      scroll-snap-align: start;
+    }
+    /* 左侧头像区域 */
+    .avatar-box {
+      position: relative;
+    }
+    .avatar-border {
+      width: 340px;
+      height: 420px;
+      border: 2px solid #222;
+      position: relative;
+    }
+    .avatar-img {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      width: 300px;
+      height: 370px;
+      background: #111;
+      object-fit: cover;
+      filter: grayscale(100%);
+    }
+    .avatar-text {
+      position: absolute;
+      left: -60px;
+      bottom: 40px;
+      color: #222;
+    }
+    .avatar-text h2 {
+      font-size: 46px;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .avatar-text p {
+      font-size: 13px;
+      line-height: 1.4;
+      opacity: 0.75;
+    }
+    /* 右侧内容区域通用 */
+    .content-box {
+      width: 520px;
+    }
+    .content-title {
+      font-size: 64px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+    }
+    .block-title {
+      display: inline-block;
+      border: 2px solid #222;
+      padding: 12px 30px;
+      font-size: 30px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    /* 第一页文字介绍 */
+    .intro-text {
+      line-height: 1.7;
+      font-size: 15px;
+      color: #333;
+    }
+    /* 第二页软件图标布局 */
+    .software-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      width: 320px;
+    }
+    .software-grid .hex-item:nth-child(4) {
+      grid-column: 1 / 2;
+    }
+    .software-grid .hex-item:nth-child(5) {
+      grid-column: 2 / 3;
+    }
+    .hex-item {
+      width: 90px;
+      height: 78px;
+      border: 1.5px solid #999;
+      clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 500;
+      color: #444;
+    }
+    /* 底部页码 */
+    .page-num {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 26px;
+      color: #999;
+      z-index: 99;
+    }
+    .page-num i {
+      display: block;
+      text-align: center;
+      margin-top: 6px;
+      font-size: 20px;
+    }
+
+    /* 手机端适配：屏幕宽度≤900px时生效 */
+    @media screen and (max-width: 900px) {
+      body {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      /* 隐藏右侧导航 */
+      .right-nav {
+        display: none;
+      }
+      /* 左侧标题缩小+位置调整 */
+      .left-title {
+        font-size: 24px;
+        top: 20px;
+        left: 20px;
+      }
+      /* 分页改为竖向排版 */
+      .page-item {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 4rem 5vw;
+        gap: 36px;
+        height: auto;
+        min-height: 100vh;
+      }
+      /* 头像区域适配 */
+      .avatar-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .avatar-border {
+        width: min(320px, 100%);
+        height: auto;
+      }
+      .avatar-img {
+        position: static;
+        width: 100%;
+        height: auto;
+        max-height: 380px;
+        margin: 16px;
+      }
+      .avatar-text {
+        position: static;
+        left: auto;
+        bottom: auto;
+        margin-top: 18px;
+        text-align: center;
+      }
+      .avatar-text h2 {
+        font-size: 38px;
+      }
+      .avatar-text p {
+        font-size: 13px;
+      }
+      /* 内容区域全屏宽度 */
+      .content-box {
+        width: 100%;
+        max-width: 760px;
+      }
+      .content-title {
+        font-size: 48px;
+        margin-bottom: 28px;
+      }
+      .block-title {
+        font-size: 24px;
+        padding: 10px 24px;
+      }
+      .intro-text {
+        font-size: 14px;
+      }
+      /* 软件图标双列布局 */
+      .software-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        gap: 18px;
+      }
+      .software-grid .hex-item:nth-child(4),
+      .software-grid .hex-item:nth-child(5) {
+        grid-column: auto; /* 重置grid列定位 */
+      }
+      .hex-item {
+        width: 100%;
+        max-width: 160px;
+        height: 70px;
+        margin: 0 auto;
+      }
+      /* 页码缩小+位置调整 */
+      .page-num {
+        bottom: 18px;
+        font-size: 22px;
+      }
+    }
+
+    /* 小屏手机适配（≤600px） */
+    @media screen and (max-width: 600px) {
+      .page-item {
+        padding: 3rem 4vw;
+      }
+      .content-title {
+        font-size: 36px;
+      }
+      .block-title {
+        font-size: 20px;
+      }
+      .intro-text {
+        font-size: 13px;
+        line-height: 1.7;
+      }
+      .avatar-text h2 {
+        font-size: 32px;
+      }
+      .avatar-text p {
+        font-size: 12px;
+      }
+      .hex-item {
+        height: 70px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 左上角固定标题 -->
+  <div class="left-title">
+    PERSONAL<br>WEBSITE
+  </div>
+
+  <!-- 右侧固定导航 -->
+  <div class="right-nav">
+    <div class="nav-menu-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <a href="个人介绍.html">首页</a>
+    <a href="个人介绍.html" class="active">个人介绍</a>
+    <a href="作品展示.html">作品展示</a>
+    <a href="联系方式.html">联系方式</a>
+  </div>
+
+  <!-- 滚动主容器 -->
+  <div class="main-wrap">
+    <!-- 第一页：个人语录介绍 -->
+    <section class="page-item" id="page1">
+      <div class="avatar-box">
+        <div class="avatar-border">
+          <!-- 替换为实际图片路径 -->
+          <img class="avatar-img" src="黑白.jpg" alt="Jack">
+        </div>
+        <div class="avatar-text">
+          <h2>JACK</h2>
+          <p>1993-09-09<br>WHO TOOK THE DESIGNER<br>MORE SHOULD BE MORE TO WORK ON</p>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <h1 class="content-title">INTRODUCE</h1>
+        <div class="block-title">QUOTATIONS</div>
+        <p class="intro-text">
+我是一名半路出家的设计师，之因为选择设计，是我从小就对一种界面的美而感到惊喜，我喜欢活跃，沉迷色彩。在界面设计中设计是感性的，而我的大学所学的机械设计，在密集而枯燥的线与线之间摆布，理所当然不适合我；很多人包括找工作面试的时候都会问到为什么在大学没有选择界面设计类的专业，我都会答道每个人都会有选择错误的时候，的确，但错误也是要用代价替换的，比别人慢一等就要多付出努力，不然就会淘汰，在这条路途中，遇到了不少困难，只要自己在以往设计中有进步，自己也就认为都值得了，现在的设计水平远远不够，学的东西还有太多，所以我依然会努力付出，因为我热爱设计，因为我相信明天会比今天好一点。
+        </p>
+      </div>
+    </section>
+
+    <!-- 第二页：软件技能 -->
+    <section class="page-item" id="page2">
+      <div class="avatar-box">
+        <div class="avatar-border">
+          <img class="avatar-img" src="黑白.jpg" alt="Jack">
+        </div>
+        <div class="avatar-text">
+          <h2>JACK</h2>
+          <p>1993-09-09<br>WHO TOOK THE DESIGNER<br>MORE SHOULD BE MORE TO WORK ON</p>
+        </div>
+      </div>
+
+      <div class="content-box">
+        <h1 class="content-title">INTRODUCE</h1>
+        <div class="block-title">SOFTWARE</div>
+        <div class="software-grid">
+          <div class="hex-item">PS</div>
+          <div class="hex-item">AI</div>
+          <div class="hex-item">DW</div>
+          <div class="hex-item">AE</div>
+          <div class="hex-item">PR</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 底部页码 -->
+  <div class="page-num">
+    <span class="num-text">1/2</span>
+    <i>⌄</i>
+  </div>
+
+  <script>
+    // 监听滚动，更新页码 + 导航高亮
+    const wrap = document.querySelector('.main-wrap');
+    const pageNum = document.querySelector('.num-text');
+    const navLinks = document.querySelectorAll('.right-nav a');
+
+    wrap.addEventListener('scroll', () => {
+      const scrollTop = wrap.scrollTop;
+      const pageHeight = window.innerHeight;
+      const current = Math.round(scrollTop / pageHeight) + 1;
+      pageNum.textContent = `${current}/2`;
+
+      // 导航激活态切换（仅PC端生效，手机端隐藏导航）
+      navLinks.forEach(link => link.classList.remove('active'));
+      if(current === 1) navLinks[1].classList.add('active');
+      if(current === 2) navLinks[1].classList.add('active'); // 第二页仍高亮「个人介绍」
+    })
+  </script>
+</body>
+</html>

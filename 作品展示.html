@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 关键：确保移动端视口适配，禁止用户缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Works - Personal Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            background-color: #f1f1f1;
+            color: #222;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 左上角标题 - PC 端样式 */
+        .left-top-title {
+            position: absolute;
+            top: 24px;
+            left: 26px;
+            font-size: 30px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: 1px;
+        }
+
+        /* 右侧固定导航栏 - PC 端样式 */
+        .right-nav {
+            position: fixed;
+            right: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+            z-index: 999;
+        }
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background-color: #222;
+        }
+        .right-nav a {
+            text-decoration: none;
+            color: #222;
+            font-size: 15px;
+            padding: 7px 14px;
+            transition: 0.2s;
+        }
+        .right-nav a.active {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* 作品页面主体容器 - PC 端样式 */
+        .works-wrap {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 45px;
+        }
+        .works-title {
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        /* 作品轮播容器 - PC 端样式 */
+        .slider-box {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        .arrow-btn {
+            width: 36px;
+            height: 36px;
+            border: 2px solid #aaa;
+            border-left: 0;
+            border-bottom: 0;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+        .arrow-left {
+            transform: rotate(-135deg);
+        }
+        .arrow-right {
+            transform: rotate(45deg);
+        }
+        .arrow-btn:hover {
+            opacity: 1;
+            border-color: #222;
+        }
+
+        /* 作品图片容器 - PC 端样式 */
+        .works-list {
+            display: flex;
+            gap: 16px;
+        }
+        .work-item {
+            width: 250px;
+            height: 320px;
+            background: #ddd;
+            overflow: hidden;
+            position: relative;
+        }
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+        /* PC 端 hover 效果（移动端不触发） */
+        .work-item:hover img {
+            filter: grayscale(0);
+        }
+
+        /* 中间视频作品样式 - PC 端 */
+        .work-video {
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .video-text-top {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+        .video-text-en {
+            font-size: 18px;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+        .play-circle {
+            width: 56px;
+            height: 56px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .play-circle:hover {
+            transform: scale(1.1);
+        }
+        .play-tri {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid #fff;
+            margin-left: 4px;
+        }
+        .video-bottom-line {
+            width: 100%;
+            height: 1px;
+            background: #fff;
+            position: relative;
+        }
+        .more-text {
+            position: absolute;
+            right: 0;
+            top: -16px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 底部英文标语 - PC 端 */
+        .works-slogan {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+            line-height: 1.6;
+            letter-spacing: 0.8px;
+        }
+
+        /* 移动端适配：900px 以下（平板/手机） */
+        @media screen and (max-width: 900px) {
+            body {
+                height: auto;
+                overflow-x: hidden;
+                overflow-y: auto; /* 允许移动端纵向滚动 */
+            }
+            .left-top-title {
+                top: 16px;
+                left: 16px;
+                font-size: 26px;
+                z-index: 998; /* 确保标题不被遮挡 */
+            }
+            /* 移动端隐藏右侧导航（可根据需求改为汉堡菜单） */
+            .right-nav {
+                display: none;
+            }
+            .works-wrap {
+                min-height: 100vh;
+                padding: 4rem 5vw 6rem; /* 增加底部内边距，避免文案被遮挡 */
+                gap: 28px;
+                justify-content: flex-start; /* 移动端从上往下排列 */
+            }
+            .works-title {
+                font-size: 48px;
+                text-align: center; /* 移动端标题居中 */
+            }
+            .slider-box {
+                flex-direction: column; /* 箭头+作品列表 纵向排列 */
+                align-items: center;
+                gap: 24px;
+                width: 100%; /* 占满屏幕宽度 */
+            }
+            .arrow-btn {
+                width: 32px;
+                height: 32px;
+                /* 移动端增加点击区域 */
+                padding: 4px;
+            }
+            .works-list {
+                flex-wrap: wrap; /* 作品卡片自动换行 */
+                justify-content: center;
+                gap: 16px;
+                width: 100%;
+            }
+            .work-item {
+                width: min(280px, 45vw); /* 自适应宽度，不超过280px */
+                height: 280px;
+            }
+            .work-video {
+                width: min(280px, 45vw);
+                padding: 18px;
+            }
+            .video-text-top {
+                font-size: 20px;
+            }
+            .video-text-en {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+            .play-circle {
+                width: 52px;
+                height: 52px;
+                margin-bottom: 24px;
+            }
+            .more-text {
+                font-size: 12px;
+            }
+            .works-slogan {
+                font-size: 16px;
+                line-height: 1.7;
+                padding: 0 2vw; /* 移动端文案左右留白 */
+            }
+        }
+
+        /* 小屏手机适配：600px 以下 */
+        @media screen and (max-width: 600px) {
+            .works-wrap {
+                padding: 3rem 4vw 5rem;
+            }
+            .works-title {
+                font-size: 36px;
+            }
+            .work-item {
+                width: 100%; /* 小屏手机卡片占满宽度 */
+                max-width: 100%;
+                height: 240px;
+            }
+            .works-list {
+                gap: 14px;
+            }
+            .video-text-top {
+                font-size: 18px;
+            }
+            .video-text-en {
+                font-size: 14px;
+            }
+            .play-circle {
+                width: 46px;
+                height: 46px;
+            }
+            .more-text {
+                top: -14px;
+            }
+            .works-slogan {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左上角固定标题 -->
+    <div class="left-top-title">
+        PERSONAL<br>WEBSITE
+    </div>
+
+    <!-- 右侧导航栏（PC 端显示，移动端隐藏） -->
+    <div class="right-nav">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a href="个人介绍.html">首页</a>
+        <a href="个人介绍.html#page1">个人介绍</a>
+        <a href="作品展示.html" class="active">作品展示</a>
+        <a href="联系方式.html">联系方式</a>
+    </div>
+
+    <!-- 作品展示页面内容 -->
+    <div class="works-wrap" id="page2">
+        <h1 class="works-title">WORKS</h1>
+
+        <div class="slider-box">
+            <div class="arrow-btn arrow-left"></div>
+
+            <div class="works-list">
+                <!-- 作品1 -->
+                <div class="work-item">
+                    <img src="1.png" alt="作品1">
+                </div>
+                <!-- 作品2 视频卡片 -->
+                <div class="work-item work-video">
+                    <div class="video-text-top">网页设计</div>
+                    <div class="video-text-en">WEB DESIGN</div>
+                    <div class="play-circle">
+                        <div class="play-tri"></div>
+                    </div>
+                    <div class="video-bottom-line">
+                        <span class="more-text">MORE</span>
+                    </div>
+                </div>
+                <!-- 作品3 -->
+                <div class="work-item">
+                    <img src="2.jpg" alt="作品3">
+                </div>
+            </div>
+
+            <div class="arrow-btn arrow-right"></div>
+        </div>
+
+        <!-- 底部英文文案 -->
+        <div class="works-slogan">
+            I CAN'T GIVE YOU THE BEST IN THE WORLD<br>
+            BUT I AM WILLING TO PUT ALL MY BEST TO YOU
+        </div>
+    </div>
+
+    <!-- 锚点占位，用于导航跳转 -->
+    <div id="page1" style="height: 100vh;"></div>
+    <div id="page3" style="height: 100vh;"></div>
+</body>
+</html>
