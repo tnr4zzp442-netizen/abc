@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 关键：确保移动端视口适配，原有meta已包含，补充shrink-to-fit避免IOS兼容问题 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>联系方式</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        body {
+            background-color: #f1f1f1;
+            color: #222222;
+            height: 100vh;
+            position: relative;
+            /* 防止移动端滚动时出现空白 */
+            min-height: 100vh;
+        }
+
+        /* 左上角固定标题 - PC端样式 */
+        .page-top-title {
+            position: absolute;
+            top: 24px;
+            left: 26px;
+            font-size: 30px;
+            font-weight: 900;
+            line-height: 1.1;
+            /* 确保标题在移动端也不被遮挡 */
+            z-index: 998;
+        }
+
+        /* 右侧固定导航栏 - PC端样式 */
+        .right-nav {
+            position: fixed;
+            right: 36px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 16px;
+            z-index: 999;
+        }
+        /* 汉堡菜单三条杠 */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background-color: #222;
+        }
+        /* 导航链接样式 */
+        .right-nav a {
+            text-decoration: none;
+            color: #222;
+            font-size: 15px;
+            padding: 7px 14px;
+            transition: all 0.2s ease;
+        }
+        /* 当前页面高亮黑色背景 */
+        .right-nav a.active {
+            background-color: #222;
+            color: #fff;
+        }
+
+        /* 居中联系方式主体区域 - PC端样式 */
+        .contact-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* 四角边框盒子 - PC端样式 */
+        .contact-box {
+            position: relative;
+            padding: 45px 70px;
+        }
+        /* 四条竖边框 */
+        .contact-box .left-border,
+        .contact-box .right-border {
+            position: absolute;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #222;
+        }
+        .contact-box .left-border { left: 0; }
+        .contact-box .right-border { right: 0; }
+        /* 四角短横线 */
+        .contact-box::before,
+        .contact-box::after,
+        .bottom-left-line,
+        .bottom-right-line {
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background: #222;
+        }
+        .contact-box::before { top: 0; left: 0; }
+        .contact-box::after { top: 0; right: 0; }
+        .bottom-left-line { bottom: 0; left: 0; }
+        .bottom-right-line { bottom: 0; right: 0; }
+
+        /* 地址文字 - PC端样式 */
+        .addr-cn {
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+        .addr-en {
+            text-align: center;
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+        }
+        /* 大标题 - PC端样式 */
+        .contact-title {
+            font-size: 66px;
+            font-weight: 900;
+            text-align: center;
+            line-height: 1.2;
+            margin: 26px 0;
+        }
+        /* 联系方式文本 - PC端样式 */
+        .contact-text {
+            text-align: center;
+            font-size: 19px;
+            line-height: 1.8;
+            letter-spacing: 0.4px;
+        }
+
+        /* 移动端适配 - 屏幕宽度≤900px */
+        @media screen and (max-width: 900px) {
+            body {
+                height: auto; /* 取消固定高度，自适应内容 */
+                overflow-x: hidden; /* 禁止横向滚动 */
+            }
+            .page-top-title {
+                top: 18px;
+                left: 18px;
+                font-size: 26px; /* 缩小标题 */
+            }
+            .right-nav {
+                display: none; /* 隐藏右侧导航 */
+            }
+            .contact-container {
+                min-height: 100vh; /* 保证至少占满屏幕高度 */
+                padding: 4rem 5vw; /* 上下内边距，左右自适应 */
+                align-items: flex-start; /* 顶部对齐，避免内容溢出 */
+                justify-content: center; /* 水平居中 */
+                height: auto; /* 取消固定高度 */
+            }
+            .contact-box {
+                width: 100%;
+                max-width: 760px; /* 限制最大宽度 */
+                padding: 36px 28px; /* 减少内边距 */
+            }
+            .addr-cn {
+                font-size: 16px;
+            }
+            .addr-en {
+                font-size: 9px;
+            }
+            .contact-title {
+                font-size: 48px; /* 缩小大标题 */
+            }
+            .contact-text {
+                font-size: 17px;
+            }
+        }
+
+        /* 小屏手机适配 - 屏幕宽度≤600px */
+        @media screen and (max-width: 600px) {
+            .contact-container {
+                padding: 3rem 4vw; /* 进一步减少内边距 */
+            }
+            .contact-box {
+                padding: 28px 20px;
+            }
+            .addr-cn {
+                font-size: 15px;
+            }
+            .addr-en {
+                font-size: 8px;
+                /* 移动端英文地址换行更友好 */
+                white-space: normal;
+                word-break: break-all;
+            }
+            .contact-title {
+                font-size: 36px; /* 进一步缩小大标题 */
+                margin: 20px 0; /* 减少上下间距 */
+            }
+            .contact-text {
+                font-size: 15px;
+                line-height: 1.6;
+                /* 移动端联系方式换行更友好 */
+                white-space: normal;
+            }
+            /* 小屏手机下四角横线缩短，适配小盒子 */
+            .contact-box::before,
+            .contact-box::after,
+            .bottom-left-line,
+            .bottom-right-line {
+                width: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左上角标题 -->
+    <div class="page-top-title">
+        PERSONAL<br>WEBSITE
+    </div>
+
+    <!-- 右侧导航栏（仅PC端显示） -->
+    <div class="right-nav">
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a href="个人介绍.html">首页</a>
+        <a href="个人介绍.html">个人介绍</a>
+        <a href="作品展示.html">作品展示</a>
+        <a href="联系方式.html" class="active">联系方式</a>
+    </div>
+
+    <!-- 联系方式页面内容 -->
+    <div class="contact-container" id="page3">
+        <div class="contact-box">
+            <div class="left-border"></div>
+            <div class="right-border"></div>
+            <div class="bottom-left-line"></div>
+            <div class="bottom-right-line"></div>
+
+            <div class="addr-cn">某省某市某区某地</div>
+            <div class="addr-en">NORTH OF GUANGZHOU AVENUE, TIANHE DISTRICT, GUANGZHOU, GUANGDONG</div>
+
+            <div class="contact-title">
+                CONTACT<br>INFORMATION
+            </div>
+
+            <div class="contact-text">
+                QQ: 2457104825 &nbsp; TEL: 15677722303<br>
+                E-MAIL: 2457104825@QQ.COM
+            </div>
+        </div>
+    </div>
+</body>
+</html>
